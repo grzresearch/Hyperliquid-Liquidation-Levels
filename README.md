@@ -1,11 +1,12 @@
 # Hyperliquid Liquidation Levels Heatmap
 
-A comprehensive Python tool for analyzing and visualizing liquidation levels on [Hyperliquid](https://hyperliquid.xyz), a decentralized perpetual exchange. This tool fetches position data, scrapes whale activity, calculates liquidation prices, and generates visual heatmaps to help traders understand where major liquidations are clustered.
+A Python tool for analyzing and visualizing liquidation levels on
+[Hyperliquid](https://hyperliquid.xyz), a decentralized perpetual exchange. It
+fetches position data, scrapes whale activity, calculates liquidation prices
+and generates heatmaps that show where large liquidations are clustered.
 
 ![Python](https://img.shields.io/badge/python-3.9%2B-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
-
-## 📊 Liquidation Levels Visualization
 
 <p align="center">
   <img src="assets/heatmap_preview.png" alt="Hyperliquid Liquidation Heatmap" width="800"/>
@@ -33,108 +34,115 @@ A comprehensive Python tool for analyzing and visualizing liquidation levels on 
                                  │
 ```
 
-The heatmap shows liquidation clusters similar to how order book depth is displayed on the Hyperliquid trading interface. **Green bars** indicate where long positions will be liquidated if price drops, while **red bars** show where short positions will be liquidated if price rises. Larger bars = more value at risk at that price level.
+The heatmap shows liquidation clusters in the same way the Hyperliquid trading
+interface shows order book depth. **Green bars** mark where long positions are
+liquidated if the price falls, **red bars** where short positions are
+liquidated if the price rises. Longer bars mean more value at risk at that
+price level.
 
-## Table of Contents
+## Contents
 
 - [Features](#features)
-- [How It Works](#how-it-works)
+- [How it works](#how-it-works)
 - [Installation](#installation)
-- [Quick Start](#quick-start)
+- [Quick start](#quick-start)
 - [Usage](#usage)
-  - [Basic Usage](#basic-usage)
-  - [Demo Mode](#demo-mode)
-  - [Interactive Charts](#interactive-charts)
-  - [Continuous Monitoring](#continuous-monitoring)
-  - [Custom Assets](#custom-assets)
-- [Understanding the Heatmap](#understanding-the-heatmap)
+- [Understanding the heatmap](#understanding-the-heatmap)
 - [Architecture](#architecture)
-- [API Reference](#api-reference)
+- [Project structure](#project-structure)
+- [Python API](#python-api)
 - [Configuration](#configuration)
-- [Data Sources](#data-sources)
-- [Liquidation Formula](#liquidation-formula)
+- [Data sources](#data-sources)
+- [Liquidation formula](#liquidation-formula)
 - [Examples](#examples)
+- [Output files](#output-files)
+- [Testing](#testing)
 - [Troubleshooting](#troubleshooting)
 - [Contributing](#contributing)
 - [Disclaimer](#disclaimer)
 - [License](#license)
+- [Acknowledgments](#acknowledgments)
 
 ## Features
 
-- **Real-time Data**: Fetches live position data from Hyperliquid's public API
-- **Whale Tracking**: Scrapes whale trades and positions from Hypurrscan.io
-- **Multi-Asset Support**: Tracks BTC, ETH, HYPE and other perpetual markets
-- **Liquidation Calculation**: Accurate liquidation price computation based on leverage and margin type
-- **Visual Heatmaps**:
-  - Static PNG heatmaps (matplotlib)
-  - Interactive HTML dashboards (plotly)
-- **Cluster Detection**: Identifies major liquidation clusters and key price levels
-- **Terminal Output**: Rich console output with summary statistics
-- **Continuous Mode**: Run as a service with periodic updates
-- **Demo Mode**: Test with sample data without API calls
+- **Real-time data**: fetches live position data from Hyperliquid's public API
+- **Whale tracking**: scrapes whale trades and positions from Hypurrscan.io
+- **Multi-asset support**: tracks BTC, ETH, HYPE and other perpetual markets
+- **Liquidation calculation**: computes liquidation prices from leverage and margin type
+- **Heatmaps**:
+  - static PNG heatmaps (matplotlib)
+  - interactive HTML charts (plotly)
+- **Cluster detection**: identifies major liquidation clusters and key price levels
+- **Terminal output**: console summary with key statistics
+- **Continuous mode**: runs as a service with periodic updates
+- **Demo mode**: runs on sample data without API calls
 
-## How It Works
+## How it works
 
-### Liquidation Basics
+### Liquidation basics
 
-On Hyperliquid, traders can open leveraged positions (long or short). When a position moves against the trader significantly, they risk **liquidation** - where the exchange forcefully closes their position to prevent negative equity.
+On Hyperliquid, traders open leveraged long or short positions. When a
+position moves far enough against the trader, it is **liquidated**: the
+exchange closes it to prevent negative equity.
 
-**Long positions** are liquidated when the price **falls** below their liquidation price.
-**Short positions** are liquidated when the price **rises** above their liquidation price.
+- **Long positions** are liquidated when the price **falls** below their liquidation price.
+- **Short positions** are liquidated when the price **rises** above their liquidation price.
 
-### What This Tool Does
+### What the tool does
 
-1. **Collects Position Data**: Fetches positions from whale wallets and Hypurrscan
-2. **Calculates Liquidation Prices**: Computes where each position would be liquidated
-3. **Aggregates by Price Level**: Groups liquidations into price bins
-4. **Visualizes as Heatmap**: Shows concentration of liquidation value at each price level
+1. **Collects position data**: fetches positions from whale wallets and Hypurrscan
+2. **Calculates liquidation prices**: computes where each position would be liquidated
+3. **Aggregates by price level**: groups liquidations into price bins
+4. **Draws the heatmap**: shows the concentration of liquidation value at each price level
 
-### Why This Matters
+### Why this matters
 
 Large clusters of liquidations can cause **cascading effects**:
-- When price hits a liquidation cluster, positions are forcefully closed
-- These forced closures add selling/buying pressure
-- This can push price through more liquidation levels
-- Creating a "liquidation cascade" or "squeeze"
 
-Understanding where these clusters are helps traders:
-- Identify potential support/resistance levels
-- Anticipate volatility zones
-- Manage risk more effectively
+- when the price reaches a liquidation cluster, positions are closed by force
+- these forced closures add selling or buying pressure
+- that pressure can push the price through further liquidation levels
+- the result is a "liquidation cascade" or "squeeze"
+
+Knowing where the clusters are helps traders to:
+
+- identify potential support and resistance levels
+- anticipate volatility zones
+- manage risk
 
 ## Installation
 
 ### Prerequisites
 
 - Python 3.9 or higher
-- pip (Python package manager)
+- pip
 
 ### Setup
 
-1. **Clone the repository**
 ```bash
-git clone https://github.com/yourusername/Hyperliquid-Liquidation-Levels.git
+git clone https://github.com/grzresearch/Hyperliquid-Liquidation-Levels.git
 cd Hyperliquid-Liquidation-Levels
-```
 
-2. **Create a virtual environment** (recommended)
-```bash
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source venv/bin/activate          # Windows: venv\Scripts\activate
+
+pip install -r requirements.txt
 ```
 
-3. **Install dependencies**
+This is all that is needed to run `python main.py` from the checkout. To also
+install the package and the `hyperliquid-liquidation` command:
+
 ```bash
-pip install -r requirements.txt
+pip install .                     # or: pip install -e ".[test]" for development
 ```
 
 ### Dependencies
 
 | Package | Purpose |
 |---------|---------|
-| `requests` | HTTP requests to Hyperliquid API |
+| `requests` | HTTP requests to the Hyperliquid API |
 | `aiohttp` | Async HTTP for concurrent fetching |
-| `beautifulsoup4` | Web scraping Hypurrscan |
+| `beautifulsoup4` | Web scraping of Hypurrscan |
 | `pandas` | Data manipulation |
 | `numpy` | Numerical computations |
 | `matplotlib` | Static chart generation |
@@ -143,50 +151,55 @@ pip install -r requirements.txt
 | `rich` | Terminal formatting |
 | `python-dotenv` | Environment configuration |
 
-## Quick Start
+`requirements.txt` also lists optional tools such as `selenium`,
+`webdriver-manager` and `kaleido`; `pyproject.toml` declares only the packages
+the code imports.
+
+## Quick start
 
 ```bash
-# Run in demo mode (no API calls, uses sample data)
+# Demo mode (no API calls, uses sample data)
 python main.py --demo
 
-# Run with real data
+# Real data
 python main.py
 
-# Generate interactive HTML charts
+# Interactive HTML charts
 python main.py --interactive
 
-# Track specific assets
+# Specific assets
 python main.py --assets BTC ETH
 ```
 
+After `pip install .`, `hyperliquid-liquidation` and
+`python -m hyperliquid_liquidation` accept the same options as `python main.py`.
+
 ## Usage
 
-### Basic Usage
+### Basic usage
 
 ```bash
 python main.py
 ```
 
 This will:
-1. Fetch current prices from Hyperliquid
-2. Collect whale addresses from various sources
-3. Query positions for those addresses
-4. Calculate liquidation levels
-5. Generate heatmaps in the `output/` directory
 
-### Demo Mode
+1. fetch current prices from Hyperliquid
+2. collect whale addresses from various sources
+3. query the positions of those addresses
+4. calculate liquidation levels
+5. write heatmaps to the `output/` directory
 
-Test the tool without making API calls:
+### Demo mode
 
 ```bash
 python main.py --demo
 ```
 
-This generates realistic sample positions to demonstrate the visualization capabilities.
+Generates realistic sample positions (200 per asset) to demonstrate the
+visualizations without any API calls.
 
-### Interactive Charts
-
-Generate interactive HTML charts with hover details:
+### Interactive charts
 
 ```bash
 python main.py --interactive
@@ -194,11 +207,10 @@ python main.py --interactive
 python main.py -i
 ```
 
-Open the generated `.html` files in your browser for an interactive experience.
+Open the generated `.html` files in a browser to explore the levels with hover
+details.
 
-### Continuous Monitoring
-
-Run continuously with periodic updates:
+### Continuous monitoring
 
 ```bash
 # Update every 5 minutes (default)
@@ -213,37 +225,35 @@ python main.py -c -i --interval 120
 
 Press `Ctrl+C` to stop.
 
-### Custom Assets
-
-Track specific assets:
+### Custom assets
 
 ```bash
 # Only BTC and ETH
 python main.py --assets BTC ETH
 
-# Add other Hyperliquid perpetuals
+# Other Hyperliquid perpetuals
 python main.py --assets BTC ETH SOL DOGE
 ```
 
-### All Options
+### All options
 
-```bash
+```text
 python main.py --help
 
-Options:
-  --demo              Run with sample data (no API calls)
-  --assets ASSETS     Assets to track (default: BTC ETH HYPE)
-  --interactive, -i   Generate interactive HTML charts
-  --continuous, -c    Run continuously with updates
-  --interval SECONDS  Update interval for continuous mode (default: 300)
-  --output DIR        Output directory (default: output)
-  --max-whales NUM    Max whale addresses to query (default: 50)
-  --testnet           Use Hyperliquid testnet
+  --demo                Run in demo mode with sample data
+  --assets ASSETS ...   Assets to track (default: BTC, ETH, HYPE)
+  --interactive, -i     Generate interactive HTML charts (requires plotly)
+  --continuous, -c      Run continuously with periodic updates
+  --interval INTERVAL   Update interval in seconds for continuous mode (default: 300)
+  --output, -o OUTPUT   Output directory for generated files (default: output)
+  --max-whales MAX_WHALES
+                        Maximum number of whale addresses to query (default: 50)
+  --testnet             Use Hyperliquid testnet instead of mainnet
 ```
 
-## Understanding the Heatmap
+## Understanding the heatmap
 
-### Reading the Chart
+### Reading the chart
 
 ```
                     ← Long Liquidations | Short Liquidations →
@@ -259,29 +269,29 @@ $94,000   |   █████████████████      <- Long c
 $92,000   ─────────────────────────────────────────────────────
 ```
 
-### Color Interpretation
+### Color interpretation
 
-- **Green bars** (left side): Long liquidations - triggered when price **falls**
-- **Red bars** (right side): Short liquidations - triggered when price **rises**
-- **Bar length**: Proportional to USD value at risk
-- **Bar intensity**: Darker = more concentrated liquidations
-- **Gold dashed line**: Current market price
+- **Green bars** (left side): long liquidations, triggered when the price **falls**
+- **Red bars** (right side): short liquidations, triggered when the price **rises**
+- **Bar length**: proportional to the USD value at risk
+- **Bar intensity**: darker means more concentrated liquidations
+- **Gold dashed line**: current market price
 
-### Key Metrics
+### Key metrics
 
 | Metric | Description |
 |--------|-------------|
 | Total Long Value | Sum of all long position values that could be liquidated |
 | Total Short Value | Sum of all short position values that could be liquidated |
-| L/S Ratio | Long value / Short value (>1 = more longs at risk) |
-| Major Levels | Price points with highest liquidation concentration |
+| L/S Ratio | Long value / short value (>1 = more longs at risk) |
+| Major Levels | Price points with the highest liquidation concentration |
 
 ## Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                        main.py                               │
-│                  (Entry point & CLI)                         │
+│                          main                               │
+│                  (entry point and CLI)                      │
 └─────────────────────┬───────────────────────────────────────┘
                       │
           ┌───────────┴───────────┐
@@ -295,97 +305,126 @@ $92,000   ───────────────────────�
                      ▼
          ┌───────────────────────┐
          │ liquidation_calculator│
-         │ (Core calculations)   │
+         │ (core calculations)   │
          └───────────┬───────────┘
                      ▼
          ┌───────────────────────┐
          │  heatmap_visualizer   │
-         │ (Charts & output)     │
+         │ (charts and output)   │
          └───────────────────────┘
 ```
 
-### Module Overview
+### Module overview
+
+All modules live in the `hyperliquid_liquidation` package under `src/`.
 
 | Module | Description |
 |--------|-------------|
-| `main.py` | Entry point, CLI parsing, orchestration |
+| `main.py` | `LiquidationHeatmapGenerator`, CLI parsing, orchestration |
 | `config.py` | Configuration constants and settings |
 | `hyperliquid_api.py` | Hyperliquid API client, position fetching |
-| `scraper.py` | Web scraping for Hypurrscan whale data |
+| `scraper.py` | Web scraping of Hypurrscan whale data |
 | `liquidation_calculator.py` | Liquidation price calculations, data aggregation |
 | `heatmap_visualizer.py` | Matplotlib and Plotly visualizations |
 
-## API Reference
+## Project structure
+
+```
+Hyperliquid-Liquidation-Levels/
+├── main.py                       # runs the CLI from a source checkout
+├── src/
+│   └── hyperliquid_liquidation/
+│       ├── __init__.py
+│       ├── __main__.py           # python -m hyperliquid_liquidation
+│       ├── main.py
+│       ├── config.py
+│       ├── hyperliquid_api.py
+│       ├── scraper.py
+│       ├── liquidation_calculator.py
+│       └── heatmap_visualizer.py
+├── tests/                        # pytest smoke tests
+├── assets/
+│   └── heatmap_preview.png
+├── .env.example
+├── pyproject.toml
+├── requirements.txt
+└── LICENSE
+```
+
+## Python API
+
+The package is importable after `pip install .` (or `pip install -e .`); from
+a plain checkout, put `src` on `PYTHONPATH`.
 
 ### HyperliquidAPI
 
 ```python
-from hyperliquid_api import HyperliquidAPI
+from hyperliquid_liquidation.hyperliquid_api import HyperliquidAPI
 
-# Initialize client
 api = HyperliquidAPI(use_testnet=False)
 
-# Get all mid prices
+# All mid prices
 prices = api.get_all_mids()
 # {'BTC': 95000.0, 'ETH': 3500.0, ...}
 
-# Get user positions
+# Positions of one user
 positions = api.get_user_positions("0x...")
 # [Position(coin='BTC', size=1.5, leverage=10, ...), ...]
 
-# Get market metadata
+# Market metadata
 assets, market_data = api.get_meta_and_asset_contexts()
 ```
 
 ### LiquidationCalculator
 
 ```python
-from liquidation_calculator import LiquidationCalculator
+from hyperliquid_liquidation.liquidation_calculator import LiquidationCalculator
 
 calc = LiquidationCalculator()
 
-# Calculate liquidation price
+# Liquidation price of one position
 liq_price = calc.calculate_position_liquidation(
     entry_price=95000,
-    size=1.0,  # Positive for long
+    size=1.0,  # positive for long
     leverage=10,
     margin_type="isolated",
-    coin="BTC"
+    coin="BTC",
 )
 
 # Aggregate positions into heatmap data
 heatmap_data = calc.aggregate_positions(
     positions=positions,
     coin="BTC",
-    current_price=95000
+    current_price=95000,
 )
 
-# Find liquidation clusters
+# Liquidation clusters
 clusters = calc.find_liquidation_clusters(heatmap_data)
 ```
 
 ### HeatmapVisualizer
 
 ```python
-from heatmap_visualizer import HeatmapVisualizer
+from hyperliquid_liquidation.heatmap_visualizer import HeatmapVisualizer
 
 viz = HeatmapVisualizer()
 
-# Create static heatmap
+# Static heatmap
 viz.create_combined_heatmap(heatmap_data, save=True, show=True)
 
-# Create interactive chart
+# Interactive chart
 viz.create_interactive_heatmap(heatmap_data, save=True)
 
-# Create multi-asset dashboard
+# Multi-asset dashboard
 viz.create_dashboard([btc_data, eth_data, hype_data])
 ```
 
 ## Configuration
 
-### Environment Variables
+### Environment variables
 
-Create a `.env` file:
+`.env.example` lists the supported variables; copy it to `.env` to customize
+them:
 
 ```bash
 # API Settings
@@ -399,53 +438,61 @@ OUTPUT_DIR=output
 CACHE_TTL=60
 ```
 
-### Configuration File
+These variables are read by `get_env_config()` in `config.py`. The CLI itself
+is configured through its command-line options and the dataclasses in
+`config.py`.
 
-Edit `config.py` for advanced settings:
+### Configuration module
+
+`src/hyperliquid_liquidation/config.py` holds the advanced settings, for
+example in `LiquidationConfig`:
 
 ```python
 # Minimum position size to consider
-min_position_usd = 10000.0
+min_position_usd: float = 10000.0
 
 # Whale threshold
-whale_threshold_usd = 100000.0
+whale_threshold_usd: float = 100000.0
 
-# Number of price levels in heatmap
-price_levels = 100
+# Number of price levels in the heatmap
+price_levels: int = 100
 
-# Price range (% around current price)
-price_range_percent = 20.0
+# Price range (% around the current price)
+price_range_percent: float = 20.0
 ```
 
-## Data Sources
+## Data sources
 
 ### Hyperliquid API
 
 The official Hyperliquid API provides:
-- Real-time prices (`allMids`)
-- User positions (`clearinghouseState`)
-- Market metadata (`metaAndAssetCtxs`)
+
+- real-time prices (`allMids`)
+- user positions (`clearinghouseState`)
+- market metadata (`metaAndAssetCtxs`)
 
 **Endpoint**: `https://api.hyperliquid.xyz/info`
 
-**Rate Limits**: ~5 requests/second recommended
+**Rate limits**: about 5 requests per second recommended
 
 ### Hypurrscan.io
 
 Hypurrscan is a third-party explorer for Hyperliquid that provides:
-- Whale leaderboards
-- Large trade history
-- Position tracking
 
-**Note**: Web scraping may be subject to rate limits and terms of service.
+- whale leaderboards
+- large trade history
+- position tracking
 
-### Alternative Sources
+**Note**: web scraping may be subject to rate limits and terms of service.
+
+### Alternative sources
 
 For enterprise use, consider:
-- [CoinGlass API](https://www.coinglass.com/hyperliquid) - Paid whale data
-- [Nansen API](https://docs.nansen.ai/api/hyperliquid-apis) - On-chain analytics
 
-## Liquidation Formula
+- [CoinGlass API](https://www.coinglass.com/hyperliquid) - paid whale data
+- [Nansen API](https://docs.nansen.ai/api/hyperliquid-apis) - on-chain analytics
+
+## Liquidation formula
 
 Hyperliquid uses the following formula for liquidation prices:
 
@@ -453,20 +500,23 @@ Hyperliquid uses the following formula for liquidation prices:
 liq_price = entry_price - side × margin_available / position_size / (1 - L × side)
 ```
 
-Where:
+where:
+
 - `side` = +1 for long, -1 for short
 - `L` = 1 / maintenance_leverage
 - `maintenance_leverage` = 2 × max_leverage
 
-### Simplified Calculations
+### Simplified calculations
 
-**For Isolated Margin:**
+**Isolated margin:**
+
 ```
 Long:  liq_price ≈ entry × (1 - 1/leverage + maintenance_rate)
 Short: liq_price ≈ entry × (1 + 1/leverage - maintenance_rate)
 ```
 
-**Maintenance Rates by Max Leverage:**
+**Maintenance rates by maximum leverage:**
+
 | Max Leverage | Maintenance Rate |
 |--------------|------------------|
 | 50x | 1.0% |
@@ -477,26 +527,29 @@ Short: liq_price ≈ entry × (1 + 1/leverage - maintenance_rate)
 
 ## Examples
 
-### Example 1: Quick Analysis
+### Example 1: quick analysis
 
 ```python
-from main import LiquidationHeatmapGenerator
+from hyperliquid_liquidation.main import LiquidationHeatmapGenerator
 
-gen = LiquidationHeatmapGenerator(assets=['BTC'])
+gen = LiquidationHeatmapGenerator(assets=["BTC"])
 files = gen.run(demo=True)
 print(f"Generated: {files}")
 ```
 
-### Example 2: Custom Visualization
+### Example 2: custom visualization
 
 ```python
-from liquidation_calculator import create_sample_positions, LiquidationCalculator
-from heatmap_visualizer import HeatmapVisualizer
+from hyperliquid_liquidation.liquidation_calculator import (
+    LiquidationCalculator,
+    create_sample_positions,
+)
+from hyperliquid_liquidation.heatmap_visualizer import HeatmapVisualizer
 
-# Generate sample data
+# Sample data
 positions = create_sample_positions("BTC", 95000, count=500)
 
-# Calculate heatmap data
+# Heatmap data
 calc = LiquidationCalculator()
 data = calc.aggregate_positions(positions, "BTC", 95000)
 
@@ -505,29 +558,29 @@ viz = HeatmapVisualizer()
 viz.create_combined_heatmap(data, show=True)
 ```
 
-### Example 3: Fetch Real Data
+### Example 3: fetch real data
 
 ```python
-from hyperliquid_api import HyperliquidAPI
+from hyperliquid_liquidation.hyperliquid_api import HyperliquidAPI
 
 api = HyperliquidAPI()
 
-# Get prices
+# Prices
 prices = api.get_all_mids()
 print(f"BTC: ${prices['BTC']:,.2f}")
 
-# Get positions for an address
+# Positions of one address
 positions = api.get_user_positions("0x...")
 for pos in positions:
     print(f"{pos.coin}: {pos.size} @ ${pos.entry_price:,.2f}")
     print(f"  Liquidation: ${pos.liquidation_price:,.2f}")
 ```
 
-### Example 4: WebSocket Real-time Updates
+### Example 4: WebSocket real-time updates
 
 ```python
 import asyncio
-from hyperliquid_api import HyperliquidWebSocket
+from hyperliquid_liquidation.hyperliquid_api import HyperliquidWebSocket
 
 async def on_trade(data):
     print(f"Trade: {data}")
@@ -540,32 +593,43 @@ async def main():
 asyncio.run(main())
 ```
 
-## Output Files
+## Output files
 
-The tool generates the following files in the `output/` directory:
+The tool writes the following files to the output directory (`output/` by
+default):
 
-| File Pattern | Description |
+| File pattern | Description |
 |--------------|-------------|
-| `{COIN}_combined_heatmap_{timestamp}.png` | Main heatmap visualization |
-| `{COIN}_interactive_heatmap_{timestamp}.html` | Interactive Plotly chart |
+| `{COIN}_combined_heatmap_{timestamp}.png` | Main heatmap |
+| `{COIN}_interactive_heatmap_{timestamp}.html` | Interactive Plotly chart (`--interactive`) |
 | `{COIN}_liquidation_stats_{timestamp}.json` | Summary statistics |
-| `liquidation_dashboard_{timestamp}.html` | Multi-asset dashboard |
+| `liquidation_dashboard_{timestamp}.html` | Multi-asset dashboard (`HeatmapVisualizer.create_dashboard()`) |
+
+## Testing
+
+```bash
+pip install -r requirements.txt pytest
+pytest
+```
+
+The smoke tests cover the liquidation formula, the price-level aggregation,
+`main.py --help` and a demo run; they make no network calls.
 
 ## Troubleshooting
 
 ### "No positions found"
 
-- Check network connectivity to Hyperliquid API
-- Verify whale addresses are correct (42-character hex)
-- Try running with `--demo` to test visualization
+- Check network connectivity to the Hyperliquid API
+- Verify that whale addresses are correct (42-character hex)
+- Run with `--demo` to test the visualization
 
 ### "Rate limited"
 
-- Reduce `--max-whales` parameter
-- Increase delay between requests in config
+- Reduce `--max-whales`
+- Lower `rate_limit` in `LiquidationConfig`
 - Consider using cached data
 
-### "Import errors"
+### Import errors
 
 ```bash
 pip install --upgrade -r requirements.txt
@@ -577,7 +641,7 @@ pip install --upgrade -r requirements.txt
 pip install plotly kaleido
 ```
 
-### "Selenium errors" (for JS-rendered scraping)
+### Selenium errors (for JS-rendered scraping)
 
 ```bash
 pip install selenium webdriver-manager
@@ -585,23 +649,24 @@ pip install selenium webdriver-manager
 
 ## Contributing
 
-Contributions are welcome! Please:
+Contributions are welcome:
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing`)
-5. Open a Pull Request
+3. Commit your changes (`git commit -m "feat: add amazing feature"`)
+4. Push the branch (`git push origin feature/amazing`)
+5. Open a pull request
 
-### Development Setup
+### Development setup
 
 ```bash
-git clone https://github.com/yourusername/Hyperliquid-Liquidation-Levels.git
+git clone https://github.com/grzresearch/Hyperliquid-Liquidation-Levels.git
 cd Hyperliquid-Liquidation-Levels
 python -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-pip install -e .  # Development install
+pip install -e ".[test]"
+pytest
 ```
 
 ## Disclaimer
@@ -614,7 +679,8 @@ pip install -e .  # Development install
 - Respect API rate limits and terms of service
 - Past liquidation patterns do not predict future movements
 
-The authors are not responsible for any financial losses incurred from using this tool or acting on its output.
+The authors are not responsible for any financial losses incurred from using
+this tool or acting on its output.
 
 ## License
 
@@ -622,12 +688,9 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 ## Acknowledgments
 
-- [Hyperliquid](https://hyperliquid.xyz) - Decentralized perpetual exchange
+- [Hyperliquid](https://hyperliquid.xyz) - decentralized perpetual exchange
 - [Hypurrscan](https://hypurrscan.io) - Hyperliquid explorer
-- [CoinGlass](https://coinglass.com) - Crypto derivatives data
+- [CoinGlass](https://coinglass.com) - crypto derivatives data
 
----
-
-**Star this repository if you find it useful!**
-
-For questions or support, please [open an issue](https://github.com/yourusername/Hyperliquid-Liquidation-Levels/issues).
+For questions or support, please
+[open an issue](https://github.com/grzresearch/Hyperliquid-Liquidation-Levels/issues).
