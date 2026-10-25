@@ -26,8 +26,8 @@ try:
 except ImportError:
     PLOTLY_AVAILABLE = False
 
-from config import DEFAULT_HEATMAP_CONFIG, TRACKED_ASSETS
-from liquidation_calculator import LiquidationHeatmapData, LiquidationCluster
+from .config import DEFAULT_HEATMAP_CONFIG, TRACKED_ASSETS
+from .liquidation_calculator import LiquidationHeatmapData, LiquidationCluster
 
 
 class HeatmapVisualizer:

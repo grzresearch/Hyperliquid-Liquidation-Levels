@@ -13,7 +13,7 @@ import aiohttp
 import requests
 from cachetools import TTLCache
 
-from config import (
+from .config import (
     HYPERLIQUID_API_URL,
     HYPERLIQUID_TESTNET_API_URL,
     TRACKED_ASSETS,

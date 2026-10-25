@@ -12,12 +12,12 @@ from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple
 from collections import defaultdict
 
-from config import (
+from .config import (
     TRACKED_ASSETS,
     ASSET_MAX_LEVERAGE,
     DEFAULT_LIQUIDATION_CONFIG,
 )
-from hyperliquid_api import Position, MarketData
+from .hyperliquid_api import Position, MarketData
 
 
 @dataclass

@@ -14,7 +14,7 @@ import aiohttp
 import requests
 from bs4 import BeautifulSoup
 
-from config import (
+from .config import (
     HYPURRSCAN_BASE_URL,
     DEFAULT_SCRAPING_CONFIG,
     TRACKED_ASSETS,
